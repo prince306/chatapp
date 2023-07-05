@@ -5,16 +5,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
 // import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
 
-public class clinet extends JFrame {
+public class client extends JFrame {
     Socket socket;
     BufferedReader br;
     PrintWriter out;
@@ -24,11 +26,12 @@ public class clinet extends JFrame {
     private JTextArea messageArea=new JTextArea();
     private JTextField messageInput=new JTextField();
     private Font font=new Font("Roboto",Font.PLAIN,20); 
-    public clinet() 
+    public client() 
     {
      try{
+        // while(!socket.isClosed()){
               System.out.println("Sending request to server");
-              socket=new Socket("192.168.1.22",7778);
+              socket=new Socket("10.11.14.228",7770);
               System.out.println("connection done");
               br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
             
@@ -43,7 +46,7 @@ public class clinet extends JFrame {
               startReading();
             //   startWriting();
 
-
+        // }
         } 
             catch(Exception e)
             {
@@ -60,6 +63,7 @@ public class clinet extends JFrame {
 
          //    ....
          heading.setFont(font);
+        //  heading.setBackground(Color.BLACK);
           messageArea.setFont(font);
          messageInput.setFont(font);
          // heading.setIcon(new ImageIcon("logo.png"));
@@ -69,11 +73,14 @@ public class clinet extends JFrame {
 
           heading.setBorder(BorderFactory.createEmptyBorder(20,40,20,40));
 
+          messageArea.setEditable(false);
+          messageInput.setHorizontalAlignment(SwingConstants.LEFT);
          // ....
          this.setLayout(new BorderLayout());
          // adding the component to   frame......
           this.add(heading,BorderLayout.NORTH);
-          this.add(messageArea,BorderLayout.CENTER);
+          JScrollPane js=new JScrollPane(messageArea);
+          this.add(js,BorderLayout.CENTER);
          this.add(messageInput,BorderLayout.SOUTH);
 
 
@@ -147,6 +154,7 @@ public class clinet extends JFrame {
                   
                     //  System.out.println("server: "+msg);
                   messageArea.append("Server :"+msg+"\n");
+                 
             }
         }
         
@@ -205,7 +213,7 @@ public class clinet extends JFrame {
     public static void main(String args[])
     {
        System.out.println("this is client....");
-       new clinet();
+       new client();
     }
     
 }
